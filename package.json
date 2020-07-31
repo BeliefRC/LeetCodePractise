@@ -28,7 +28,9 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-node": "8.0.0",
     "eslint-plugin-promise": "4.0.1",
-    "eslint-plugin-standard": "4.0.0"
+    "eslint-plugin-standard": "4.0.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
   },
   "bugs": {
     "url": "https://github.com/BeliefRC/LeetCodePractise/issues"
