@@ -27,6 +27,7 @@ var uniquePathsIII = function (grid) {
   }
   const directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
   const dfs = (y, x, count) => {
+    visited[y][x] = true
     const value = grid[y][x]
     if (count === legalPointsNum && value === 2) {
       result++
@@ -45,7 +46,6 @@ var uniquePathsIII = function (grid) {
       }
     }
   }
-  visited[startY][startX] = true
   dfs(startY, startX, 0)
   return result
 }
