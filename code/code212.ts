@@ -5,36 +5,40 @@ function findWords (board: string[][], words: string[]): string[] {
   if (!maxY) {
     return result
   }
+  const visited: boolean[][] = []
+  for (let y = 0; y < maxY; y++) {
+    visited[y] = []
+  }
   const directions: number[][] = [[0, 1], [0, -1], [1, 0], [-1, 0]]
   const isLegal = (y: number, x: number): boolean => {
-    return y >= 0 && y < maxY && x > 0 && x < maxX
+    return y >= 0 && y < maxY && x > 0 && x < maxX && !visited[y][x]
   }
   const getWords = (
     startY: number,
     startX: number,
-    direction: number[],
     word: string,
     countStr: string,
   ): void => {
-
-    const [y, x] = direction
-    const nextY = startY + y
-    const nextX = startX + x
-    if (isLegal(nextY, nextX)) {
-      countStr = countStr + board[nextY][nextX]
-      if (countStr === word) {
-        result.push(word)
-      }else {
-        getWords(nextY, nextX, direction, word, countStr)
+    visited[startY][startX] = true
+    for (let direction of directions) {
+      const [y, x] = direction
+      const nextY = startY + y
+      const nextX = startX + x
+      if (isLegal(nextY, nextX)) {
+        countStr = countStr + board[nextY][nextX]
+        if (countStr === word) {
+          result.push(word)
+        } else {
+          getWords(nextY, nextX, word, countStr)
+        }
       }
     }
+    visited[startY][startX] = false
   }
   words.map(word => {
     for (let i = 0; i < maxY; i++) {
       for (let j = 0; j < maxX; j++) {
-        for (let direction of directions) {
-          getWords(i, j, direction, word, '')
-        }
+        getWords(i, j, word, board[i][j])
       }
     }
   })
