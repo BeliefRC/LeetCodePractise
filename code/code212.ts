@@ -11,44 +11,45 @@ function findWords (board: string[][], words: string[]): string[] {
   }
   const directions: number[][] = [[0, 1], [0, -1], [1, 0], [-1, 0]]
   const isLegal = (y: number, x: number): boolean => {
-    return y >= 0 && y < maxY && x > 0 && x < maxX && !visited[y][x]
+    return y >= 0 && y < maxY && x >= 0 && x < maxX && !visited[y][x]
   }
   const getWords = (
     startY: number,
     startX: number,
     word: string,
-    countStr: string,
-  ): void => {
-    visited[startY][startX] = true
-    for (let direction of directions) {
-      const [y, x] = direction
-      const nextY = startY + y
-      const nextX = startX + x
-      if (isLegal(nextY, nextX)) {
-        countStr = countStr + board[nextY][nextX]
-        if (countStr === word) {
-          result.push(word)
-        } else {
-          getWords(nextY, nextX, word, countStr)
+    index: number,
+  ): boolean => {
+    const char = board[startY][startX]
+    const targetChar = word[index]
+    if (char === targetChar) {
+      if (index === word.length - 1) {
+        result.push(word)
+        return true
+      } else {
+        visited[startY][startX] = true
+        for (const [y, x] of directions) {
+          const nextY = startY + y
+          const nextX = startX + x
+          if (isLegal(nextY, nextX)) {
+            getWords(nextY, nextX, word, index + 1)
+          }
+        }
+        visited[startY][startX] = false
+      }
+    }
+    return false
+  }
+
+  const find = (word: string): void => {
+    for (let i = 0; i < maxY; i++) {
+      for (let j = 0; j < maxX; j++) {
+        const isBreak = getWords(i, j, word, 0)
+        if (isBreak) {
+          return
         }
       }
     }
-    visited[startY][startX] = false
   }
-  words.map(word => {
-    for (let i = 0; i < maxY; i++) {
-      for (let j = 0; j < maxX; j++) {
-        getWords(i, j, word, board[i][j])
-      }
-    }
-  })
-  return result
+  words.map(find)
+  return Array.from(new Set(result))
 }
-
-findWords([
-    ['o', 'a', 'a', 'n'],
-    ['e', 't', 'a', 'e'],
-    ['i', 'h', 'k', 'r'],
-    ['i', 'f', 'l', 'v'],
-  ]
-  , ['oath', 'pea', 'eat', 'rain'])
