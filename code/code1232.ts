@@ -1,27 +1,22 @@
-function checkStraightLine (coordinates: number[][]): boolean {
-  if (coordinates.length > 2) {
-    const arr: number[] = []
-    let prev: number
-    for (let i = 1; i < coordinates.length; i++) {
-      let temp: number
-      const diffX = coordinates[i][0] - coordinates[i - 1][0]
-      const diffY = coordinates[i][1] - coordinates[i - 1][1]
-      if (diffX === 0) {
-        temp = Infinity
-      } else if (diffY === 0) {
-        temp = -Infinity
-      } else {
-        temp = diffY / diffX
-      }
-      if (prev) {
-        if (prev !== temp) {
-          return false
-        }
-      }
-      prev = temp
+function thousandSeparator2(num) {
+  // 12,345,678.1234
+  const[left,right]=num.toString().split('.')
+  let len=left.length
+  let index=0
+  let result=''
+  while(len>=0){
+    if(index%3===0&&index!==0){
+      result+=`,${left[len]}`
+    }else{
+      result+=left[len]
     }
-    return true
-  } else {
-    return true
+    len--
+    index++
+  }
+  result=result.split('').reverse().join('')
+  if(right){
+    return `${result}.&{right}`
+  }else{
+    return result
   }
 }
